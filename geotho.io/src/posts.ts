@@ -4,6 +4,8 @@ import React from "react";
 // When you add a new post, you need to import its component and raw content.
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
+import SoyToryContent from "./posts/soy-tory.mdx";
+import soyToryRaw from "./posts/soy-tory.mdx?raw";
 
 interface PostAttributes {
   title: string;
@@ -21,6 +23,11 @@ const allPosts: Post[] = [
     slug: "hello-world",
     attributes: fm<PostAttributes>(helloWorldRaw).attributes,
     Content: HelloWorldContent,
+  },
+  {
+    slug: "soy-tory",
+    attributes: fm<PostAttributes>(soyToryRaw).attributes,
+    Content: SoyToryContent,
   },
   // Add other posts here, following the same pattern.
 ];
