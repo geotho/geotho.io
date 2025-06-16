@@ -3,6 +3,7 @@ import MainLayout from "./components/MainLayout";
 import AboutPage from "./pages/AboutPage";
 import HomePage from "./pages/HomePage";
 import ToolsIndexPage from "./pages/ToolsIndexPage";
+import GradientGenerator from "./tools/GradientGenerator";
 import HelloWorld from "./tools/HelloWorld";
 
 export const router = createBrowserRouter([
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
           {
             path: "hello-world",
             element: <HelloWorld />,
+          },
+          {
+            path: "gradient-generator",
+            element: <GradientGenerator />,
           },
         ],
       },

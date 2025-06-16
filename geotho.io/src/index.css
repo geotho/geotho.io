@@ -59,24 +59,6 @@ body {
   }
 }
 
-/* Futuristic scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #4f46e5, #ef4444);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #4338ca, #dc2626);
-}
-
 /* Selection styling */
 ::selection {
   background: rgba(79, 70, 229, 0.3);
