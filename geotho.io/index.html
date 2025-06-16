@@ -4,14 +4,39 @@
     <meta charset="UTF-8" />
     <link
       rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐢</text></svg>"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>George Thomas | Blog</title>
+    <title>George Thomas</title>
     <meta
       name="description"
-      content="Personal blog of George Thomas, cofounder of Clusterfudge.com"
+      content="George Thomas (geotho) personal website"
     />
+    <meta name="theme-color" content="#c7d2fe" />
+    <meta name="color-scheme" content="light" />
+    <style>
+      body {
+        background: linear-gradient(
+          to right,
+          rgb(199, 210, 254),
+          rgb(254, 202, 202),
+          rgb(254, 249, 195)
+        );
+        margin: 0;
+        overflow-x: hidden;
+      }
+      @keyframes slow-pulse {
+        0%,
+        100% {
+          opacity: 0.4;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.7;
+          transform: scale(1.05);
+        }
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
