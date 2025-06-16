@@ -6,6 +6,11 @@ const tools = [
     path: "hello-world",
     description: "A simple example tool.",
   },
+  {
+    name: "Tailwind CSS Gradient Generator",
+    path: "tailwind-css-gradient-generator",
+    description: "Create beautiful gradients with Tailwind CSS.",
+  },
 ];
 
 const ToolsIndexPage = () => {
