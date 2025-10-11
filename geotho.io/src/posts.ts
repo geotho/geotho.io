@@ -2,6 +2,10 @@ import fm from "front-matter";
 import React from "react";
 
 // When you add a new post, you need to import its component and raw content.
+import RejectUnrecognisedParametersContent from "./posts/2016-02-22-reject-unrecognised-parameters.mdx";
+import rejectUnrecognisedParametersRaw from "./posts/2016-02-22-reject-unrecognised-parameters.mdx?raw";
+import KakuroSolvingContent from "./posts/2016-07-07-kakuro-solving.mdx";
+import kakuroSolvingRaw from "./posts/2016-07-07-kakuro-solving.mdx?raw";
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
 import SoyToryContent from "./posts/soy-tory.mdx";
@@ -19,6 +23,16 @@ interface Post {
 }
 
 const allPosts: Post[] = [
+  {
+    slug: "2016-02-22-reject-unrecognised-parameters",
+    attributes: fm<PostAttributes>(rejectUnrecognisedParametersRaw).attributes,
+    Content: RejectUnrecognisedParametersContent,
+  },
+  {
+    slug: "2016-07-07-kakuro-solving",
+    attributes: fm<PostAttributes>(kakuroSolvingRaw).attributes,
+    Content: KakuroSolvingContent,
+  },
   {
     slug: "hello-world",
     attributes: fm<PostAttributes>(helloWorldRaw).attributes,
