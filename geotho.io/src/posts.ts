@@ -40,6 +40,10 @@ import GoTableTestTipsContent from "./posts/2017-04-13-go-table-test-tips.mdx";
 import goTableTestTipsRaw from "./posts/2017-04-13-go-table-test-tips.mdx?raw";
 import GoBetterProgrammerContent from "./posts/2017-06-06-go-better-programmer.mdx";
 import goBetterProgrammerRaw from "./posts/2017-06-06-go-better-programmer.mdx?raw";
+import IntegerOverflowContent from "./posts/2017-07-03-integer-overflow.mdx";
+import integerOverflowRaw from "./posts/2017-07-03-integer-overflow.mdx?raw";
+import UnittestNondeterminismContent from "./posts/2017-08-02-unittest-nondeterminism.mdx";
+import unittestNondeterminismRaw from "./posts/2017-08-02-unittest-nondeterminism.mdx?raw";
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
 import SoyToryContent from "./posts/soy-tory.mdx";
@@ -151,6 +155,16 @@ const allPosts: Post[] = [
     slug: "2017-06-06-go-better-programmer",
     attributes: fm<PostAttributes>(goBetterProgrammerRaw).attributes,
     Content: GoBetterProgrammerContent,
+  },
+  {
+    slug: "2017-07-03-integer-overflow",
+    attributes: fm<PostAttributes>(integerOverflowRaw).attributes,
+    Content: IntegerOverflowContent,
+  },
+  {
+    slug: "2017-08-02-unittest-nondeterminism",
+    attributes: fm<PostAttributes>(unittestNondeterminismRaw).attributes,
+    Content: UnittestNondeterminismContent,
   },
   {
     slug: "hello-world",

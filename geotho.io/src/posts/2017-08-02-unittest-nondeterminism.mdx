@@ -1,0 +1,90 @@
+---
+title: "Unit testing non-determinstic functions"
+date: "2017-08-02"
+---
+
+A trend I’ve noticed among whiteboard-coding type questions is to ask questions about randomness.
+
+Examples of these questions are things like:
+
+- pick a random element from an array.
+- given a method rand5() that returns a integer between 0 and 4 inclusive uniformly at random,
+  implement rand7().
+- implement randomOdd(int min, int max), which returns a random odd number between min and max.
+- implement randomPrime(int min, int max), which returns a random prime number between min and max.
+
+The popularity of these questions is partly because you won’t find them on LeetCode or HackerRank. Because writing test cases is hard.
+
+So how can you write tests for non-deterministic functions? Here are some thoughts.
+
+#### Consider deterministic edge cases
+
+What should randomOdd(2,4) return? Probably only ever `3`. So walk through your code and make sure that is the case. Remember than `randInt(n)` (Java) and `rand.Intn(n)` (Go) both return results in the range [0,n) i.e. the largest number it can return is `n-1`.
+
+#### Make your function deterministic
+
+All standard library randomness sources allow you to seed them for deterministic output. Your functions should also allow this. For example, if I were to write the `randomOdd` function above, I would wrap it in a class and allow the user to specify the random source:
+
+```java
+public class RandomOdder {
+  private Random r;
+  public RandomOdder() {
+    this.r = new Random();
+  }
+  public RandomOdder(Random r) {
+    this.r = r;
+  }
+  public int randomOdd(int min, int max) {
+    // ... uses this.r, not random.randInt directly.
+  }
+}
+```
+
+If I were writing in Go, I would probably create my own random interface:
+
+```go
+type Intner interface {
+  Intn(n int) int
+}
+
+type RandomOdder struct {
+  i Intner
+}
+
+func (r *RandomOdder) RandomOdd(min, max int) int {
+  // ... uses r.i, not rand.Intn
+}
+```
+
+Note that here, `random.Source` already implements the `Intner` interface. So I can pass one of those in directly.
+
+The really nice part about this approach is that you can provide a totally determinstic mock `Intner` e.g.:
+
+```go
+type NotAtAllRandomIntner int
+
+func (i NotAtAllRandomIntner) Intn(n int) {
+  return i
+}
+```
+
+Then, when you write unit tests you can specify the output of the random source directly.
+
+The issue with this is that you have coupled your unit test to the implementation of the function, rather than its interface. Changes to the function body may require changes to the tests, which is suboptimal. If mocking the random source is non-trivial they maybe just using a determinstic (i.e. consistently seeded) random generator is fine with some appropriate statistical tests.
+
+#### Maybe write statistical tests
+
+Realise the distinction between “unit testing randomness” and “unit testing code that uses randomness.” Try to avoid testing the randomness of the random number generator.
+
+Suppose you’ve written a function which you think shuffles a list uniformly at random:
+
+```go
+func Shuffle(xs []int) {
+  for i := range xs {
+    r := rand.Intn(len(xs))
+    xs[i], xs[r] = xs[r], xs[i]
+  }
+}
+```
+
+[Read on for how we might write a statistical test.](https://geotho.github.io/post/2018/2018-08-26-weighted-sampling/)
