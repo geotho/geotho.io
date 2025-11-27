@@ -28,6 +28,8 @@ import CmdotpGoogleAuthenticatorContent from "./posts/2016-12-22-cmdotp-google-a
 import cmdotpGoogleAuthenticatorRaw from "./posts/2016-12-22-cmdotp-google-authenticator-for-the-command-line.mdx?raw";
 import ThoughtsOnEUnibusPluramContent from "./posts/2016-12-26-thoughts-on-e-unibus-pluram.mdx";
 import thoughtsOnEUnibusPluramRaw from "./posts/2016-12-26-thoughts-on-e-unibus-pluram.mdx?raw";
+import OnMindcrimeContent from "./posts/2017-01-16-on-mindcrime.mdx";
+import onMindcrimeRaw from "./posts/2017-01-16-on-mindcrime.mdx?raw";
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
 import SoyToryContent from "./posts/soy-tory.mdx";
@@ -109,6 +111,11 @@ const allPosts: Post[] = [
     slug: "2016-12-26-thoughts-on-e-unibus-pluram",
     attributes: fm<PostAttributes>(thoughtsOnEUnibusPluramRaw).attributes,
     Content: ThoughtsOnEUnibusPluramContent,
+  },
+  {
+    slug: "2017-01-16-on-mindcrime",
+    attributes: fm<PostAttributes>(onMindcrimeRaw).attributes,
+    Content: OnMindcrimeContent,
   },
   {
     slug: "hello-world",
