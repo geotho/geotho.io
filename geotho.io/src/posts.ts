@@ -22,6 +22,8 @@ import LifeWithoutAPhoneContent from "./posts/2016-11-20-life-without-a-phone.md
 import lifeWithoutAPhoneRaw from "./posts/2016-11-20-life-without-a-phone.mdx?raw";
 import AddJsonTagsToGoStructsContent from "./posts/2016-12-05-add-json-tags-to-go-structs.mdx";
 import addJsonTagsToGoStructsRaw from "./posts/2016-12-05-add-json-tags-to-go-structs.mdx?raw";
+import BriefNotesOnHomoDeusContent from "./posts/2016-12-12-brief-notes-on-homo-deus.mdx";
+import briefNotesOnHomoDeusRaw from "./posts/2016-12-12-brief-notes-on-homo-deus.mdx?raw";
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
 import SoyToryContent from "./posts/soy-tory.mdx";
@@ -88,6 +90,11 @@ const allPosts: Post[] = [
     slug: "2016-12-05-add-json-tags-to-go-structs",
     attributes: fm<PostAttributes>(addJsonTagsToGoStructsRaw).attributes,
     Content: AddJsonTagsToGoStructsContent,
+  },
+  {
+    slug: "2016-12-12-brief-notes-on-homo-deus",
+    attributes: fm<PostAttributes>(briefNotesOnHomoDeusRaw).attributes,
+    Content: BriefNotesOnHomoDeusContent,
   },
   {
     slug: "hello-world",
