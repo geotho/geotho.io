@@ -20,6 +20,8 @@ import RecoveringPrivacyZonesStravaContent from "./posts/2016-09-04-recovering-p
 import recoveringPrivacyZonesStravaRaw from "./posts/2016-09-04-recovering-privacy-zones-strava.mdx?raw";
 import LifeWithoutAPhoneContent from "./posts/2016-11-20-life-without-a-phone.mdx";
 import lifeWithoutAPhoneRaw from "./posts/2016-11-20-life-without-a-phone.mdx?raw";
+import AddJsonTagsToGoStructsContent from "./posts/2016-12-05-add-json-tags-to-go-structs.mdx";
+import addJsonTagsToGoStructsRaw from "./posts/2016-12-05-add-json-tags-to-go-structs.mdx?raw";
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
 import SoyToryContent from "./posts/soy-tory.mdx";
@@ -81,6 +83,11 @@ const allPosts: Post[] = [
     slug: "2016-11-20-life-without-a-phone",
     attributes: fm<PostAttributes>(lifeWithoutAPhoneRaw).attributes,
     Content: LifeWithoutAPhoneContent,
+  },
+  {
+    slug: "2016-12-05-add-json-tags-to-go-structs",
+    attributes: fm<PostAttributes>(addJsonTagsToGoStructsRaw).attributes,
+    Content: AddJsonTagsToGoStructsContent,
   },
   {
     slug: "hello-world",
