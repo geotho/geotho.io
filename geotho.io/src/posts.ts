@@ -18,6 +18,8 @@ import DisplayLessStuffContent from "./posts/2016-08-20-display-less-stuff.mdx";
 import displayLessStuffRaw from "./posts/2016-08-20-display-less-stuff.mdx?raw";
 import RecoveringPrivacyZonesStravaContent from "./posts/2016-09-04-recovering-privacy-zones-strava.mdx";
 import recoveringPrivacyZonesStravaRaw from "./posts/2016-09-04-recovering-privacy-zones-strava.mdx?raw";
+import LifeWithoutAPhoneContent from "./posts/2016-11-20-life-without-a-phone.mdx";
+import lifeWithoutAPhoneRaw from "./posts/2016-11-20-life-without-a-phone.mdx?raw";
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
 import SoyToryContent from "./posts/soy-tory.mdx";
@@ -74,6 +76,11 @@ const allPosts: Post[] = [
     slug: "2016-09-04-recovering-privacy-zones-strava",
     attributes: fm<PostAttributes>(recoveringPrivacyZonesStravaRaw).attributes,
     Content: RecoveringPrivacyZonesStravaContent,
+  },
+  {
+    slug: "2016-11-20-life-without-a-phone",
+    attributes: fm<PostAttributes>(lifeWithoutAPhoneRaw).attributes,
+    Content: LifeWithoutAPhoneContent,
   },
   {
     slug: "hello-world",
