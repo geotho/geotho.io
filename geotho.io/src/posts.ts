@@ -12,6 +12,10 @@ import AnalysingRuntimeAlgorithmsContent from "./posts/2016-07-31-analysing-runt
 import analysingRuntimeAlgorithmsRaw from "./posts/2016-07-31-analysing-runtime-algorithms.mdx?raw";
 import EmailUnsubscriptionUxContent from "./posts/2016-08-03-email-unsubscription-ux.mdx";
 import emailUnsubscriptionUxRaw from "./posts/2016-08-03-email-unsubscription-ux.mdx?raw";
+import WhiteboardCodingInterviewsContent from "./posts/2016-08-09-whiteboard-coding-interviews.mdx";
+import whiteboardCodingInterviewsRaw from "./posts/2016-08-09-whiteboard-coding-interviews.mdx?raw";
+import DisplayLessStuffContent from "./posts/2016-08-20-display-less-stuff.mdx";
+import displayLessStuffRaw from "./posts/2016-08-20-display-less-stuff.mdx?raw";
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
 import SoyToryContent from "./posts/soy-tory.mdx";
@@ -53,6 +57,16 @@ const allPosts: Post[] = [
     slug: "2016-08-03-email-unsubscription-ux",
     attributes: fm<PostAttributes>(emailUnsubscriptionUxRaw).attributes,
     Content: EmailUnsubscriptionUxContent,
+  },
+  {
+    slug: "2016-08-09-whiteboard-coding-interviews",
+    attributes: fm<PostAttributes>(whiteboardCodingInterviewsRaw).attributes,
+    Content: WhiteboardCodingInterviewsContent,
+  },
+  {
+    slug: "2016-08-20-display-less-stuff",
+    attributes: fm<PostAttributes>(displayLessStuffRaw).attributes,
+    Content: DisplayLessStuffContent,
   },
   {
     slug: "hello-world",
