@@ -16,6 +16,8 @@ import WhiteboardCodingInterviewsContent from "./posts/2016-08-09-whiteboard-cod
 import whiteboardCodingInterviewsRaw from "./posts/2016-08-09-whiteboard-coding-interviews.mdx?raw";
 import DisplayLessStuffContent from "./posts/2016-08-20-display-less-stuff.mdx";
 import displayLessStuffRaw from "./posts/2016-08-20-display-less-stuff.mdx?raw";
+import RecoveringPrivacyZonesStravaContent from "./posts/2016-09-04-recovering-privacy-zones-strava.mdx";
+import recoveringPrivacyZonesStravaRaw from "./posts/2016-09-04-recovering-privacy-zones-strava.mdx?raw";
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
 import SoyToryContent from "./posts/soy-tory.mdx";
@@ -67,6 +69,11 @@ const allPosts: Post[] = [
     slug: "2016-08-20-display-less-stuff",
     attributes: fm<PostAttributes>(displayLessStuffRaw).attributes,
     Content: DisplayLessStuffContent,
+  },
+  {
+    slug: "2016-09-04-recovering-privacy-zones-strava",
+    attributes: fm<PostAttributes>(recoveringPrivacyZonesStravaRaw).attributes,
+    Content: RecoveringPrivacyZonesStravaContent,
   },
   {
     slug: "hello-world",
