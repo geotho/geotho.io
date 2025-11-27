@@ -30,6 +30,16 @@ import ThoughtsOnEUnibusPluramContent from "./posts/2016-12-26-thoughts-on-e-uni
 import thoughtsOnEUnibusPluramRaw from "./posts/2016-12-26-thoughts-on-e-unibus-pluram.mdx?raw";
 import OnMindcrimeContent from "./posts/2017-01-16-on-mindcrime.mdx";
 import onMindcrimeRaw from "./posts/2017-01-16-on-mindcrime.mdx?raw";
+import ReversingDomainsContent from "./posts/2017-02-12-reversing-domains.mdx";
+import reversingDomainsRaw from "./posts/2017-02-12-reversing-domains.mdx?raw";
+import SoftwareEngineeringInternshipTipsContent from "./posts/2017-03-19-software-engineering-internship-tips.mdx";
+import softwareEngineeringInternshipTipsRaw from "./posts/2017-03-19-software-engineering-internship-tips.mdx?raw";
+import FunctionSignatureContent from "./posts/2017-03-25-function-signature.mdx";
+import functionSignatureRaw from "./posts/2017-03-25-function-signature.mdx?raw";
+import GoTableTestTipsContent from "./posts/2017-04-13-go-table-test-tips.mdx";
+import goTableTestTipsRaw from "./posts/2017-04-13-go-table-test-tips.mdx?raw";
+import GoBetterProgrammerContent from "./posts/2017-06-06-go-better-programmer.mdx";
+import goBetterProgrammerRaw from "./posts/2017-06-06-go-better-programmer.mdx?raw";
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
 import SoyToryContent from "./posts/soy-tory.mdx";
@@ -116,6 +126,31 @@ const allPosts: Post[] = [
     slug: "2017-01-16-on-mindcrime",
     attributes: fm<PostAttributes>(onMindcrimeRaw).attributes,
     Content: OnMindcrimeContent,
+  },
+  {
+    slug: "2017-02-12-reversing-domains",
+    attributes: fm<PostAttributes>(reversingDomainsRaw).attributes,
+    Content: ReversingDomainsContent,
+  },
+  {
+    slug: "2017-03-19-software-engineering-internship-tips",
+    attributes: fm<PostAttributes>(softwareEngineeringInternshipTipsRaw).attributes,
+    Content: SoftwareEngineeringInternshipTipsContent,
+  },
+  {
+    slug: "2017-03-25-function-signature",
+    attributes: fm<PostAttributes>(functionSignatureRaw).attributes,
+    Content: FunctionSignatureContent,
+  },
+  {
+    slug: "2017-04-13-go-table-test-tips",
+    attributes: fm<PostAttributes>(goTableTestTipsRaw).attributes,
+    Content: GoTableTestTipsContent,
+  },
+  {
+    slug: "2017-06-06-go-better-programmer",
+    attributes: fm<PostAttributes>(goBetterProgrammerRaw).attributes,
+    Content: GoBetterProgrammerContent,
   },
   {
     slug: "hello-world",
