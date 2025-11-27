@@ -6,6 +6,12 @@ import RejectUnrecognisedParametersContent from "./posts/2016-02-22-reject-unrec
 import rejectUnrecognisedParametersRaw from "./posts/2016-02-22-reject-unrecognised-parameters.mdx?raw";
 import KakuroSolvingContent from "./posts/2016-07-07-kakuro-solving.mdx";
 import kakuroSolvingRaw from "./posts/2016-07-07-kakuro-solving.mdx?raw";
+import ForestForTheTreesContent from "./posts/2016-07-28-forest-for-the-trees.mdx";
+import forestForTheTreesRaw from "./posts/2016-07-28-forest-for-the-trees.mdx?raw";
+import AnalysingRuntimeAlgorithmsContent from "./posts/2016-07-31-analysing-runtime-algorithms.mdx";
+import analysingRuntimeAlgorithmsRaw from "./posts/2016-07-31-analysing-runtime-algorithms.mdx?raw";
+import EmailUnsubscriptionUxContent from "./posts/2016-08-03-email-unsubscription-ux.mdx";
+import emailUnsubscriptionUxRaw from "./posts/2016-08-03-email-unsubscription-ux.mdx?raw";
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
 import SoyToryContent from "./posts/soy-tory.mdx";
@@ -32,6 +38,21 @@ const allPosts: Post[] = [
     slug: "2016-07-07-kakuro-solving",
     attributes: fm<PostAttributes>(kakuroSolvingRaw).attributes,
     Content: KakuroSolvingContent,
+  },
+  {
+    slug: "2016-07-28-forest-for-the-trees",
+    attributes: fm<PostAttributes>(forestForTheTreesRaw).attributes,
+    Content: ForestForTheTreesContent,
+  },
+  {
+    slug: "2016-07-31-analysing-runtime-algorithms",
+    attributes: fm<PostAttributes>(analysingRuntimeAlgorithmsRaw).attributes,
+    Content: AnalysingRuntimeAlgorithmsContent,
+  },
+  {
+    slug: "2016-08-03-email-unsubscription-ux",
+    attributes: fm<PostAttributes>(emailUnsubscriptionUxRaw).attributes,
+    Content: EmailUnsubscriptionUxContent,
   },
   {
     slug: "hello-world",

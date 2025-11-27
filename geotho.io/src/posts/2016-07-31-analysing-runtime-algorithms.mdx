@@ -1,0 +1,265 @@
+---
+title: "Analysing runtime of algorithms"
+date: "2016-07-31"
+---
+
+In this post, I consider four different algorithms that solve the same problem.
+
+## The problem
+
+Imagine a square 2D array that contains only zeroes and ones. Each row and column is sorted in ascending order. Count the number of zeroes.
+
+```
+0 0 0 0 0 0 0 0 0 1
+0 0 0 0 0 0 0 0 1 1
+0 0 0 0 0 0 1 1 1 1
+0 0 0 1 1 1 1 1 1 1
+0 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+```
+
+I found this problem on [CareerCup](https://careercup.com/question?id=5767203879124992) and was drawn initially to the uncertainty about the fastest possible algorithm.
+
+The four algorithms I’m going to analyse are:
+
+- linear counting
+- binary search per row
+- 2D binary search / quadtree
+- saddleback search
+
+### Linear counting
+
+The simplest of the four algorithms. Iterate over the array, incrementing a counter if we see a zero (note here and below I use booleans rather than 0s and 1s).
+
+```go
+func Count(arr [][]bool) int {
+  total := 0
+  for _, row := range arr {
+    for _, v := range row {
+      // if we hit a true, we can stop with this row
+      if v {
+        break
+      }
+      total++
+    }
+  }
+  return total
+}
+```
+
+The runtime complexity of performing a linear count across an N×N 2D array is O(N²), with O(1) memory requirement.
+
+### Binary search per row
+
+To speed up our counting, we can perform a binary search on each row to find the last zero. If we know the index of the last zero, we know how many there are in each row.
+
+```go
+func Count(arr [][]bool) int {
+  total := 0
+  zeroes := len(arr)
+  for _, row := range arr {
+    // Limit the row by the previous number of zeroes
+    zeroes := CountZeroes(row[:zeroes])
+    if zeroes == 0 {
+      break
+    }
+    total += zeroes
+  }
+  return total
+}
+
+func CountZeroes(row []bool) int {
+  if row[0] {
+    return 0
+  }
+
+  if !row[len(row)-1] {
+    return len(row)
+  }
+
+  hi := len(row)
+  lo := 0
+
+  for {
+    mid := (hi - 1 + lo) / 2
+    if !row[mid] {
+      if row[mid+1] {
+        return mid + 1
+      }
+      lo = mid + 1
+      continue
+    }
+    hi = mid
+  }
+}
+```
+
+The runtime complexity of performing a binary search on a row of N numbers is O(log N). We have to do one binary search for each of the N rows, so the total complexity is O(N log N), again with O(1) memory requirement.
+
+### Quadtree
+
+A quadtree recursively divides a space into quadrants. Quadtrees can be used to count zeroes in the following way:
+
+1) Pick the middle row in the array.  
+2) Find the last zero in this row. Call this point m.  
+3) Divide the array into four:
+   - The quadrant north-west of m is full only of zeroes. Add this to a total.
+   - The quadrant south-east of m is full only of ones. Ignore this completely.
+   - The north-east and south-west quadrants contain zeroes and ones. Recurse into each of these quadrants.
+
+```go
+type point struct { x, y int }
+
+func Count(arr [][]bool) int {
+  n := len(arr)
+  return countR(arr, point{0, 0}, point{n - 1, n - 1})
+}
+
+func countR(arr [][]bool, topLeft, bottomRight point) int {
+  if topLeft.x < 0 || topLeft.y < 0 {
+    return 0
+  }
+
+  if n := len(arr); bottomRight.x > n || bottomRight.y > n {
+    return 0
+  }
+
+  if bottomRight.x < topLeft.x || bottomRight.y < topLeft.y {
+    return 0
+  }
+
+  if topLeft == bottomRight {
+    if arr[topLeft.y][topLeft.x] {
+      return 0
+    }
+    return 1
+  }
+
+  if topLeft.y == bottomRight.y {
+    return CountZeroes(arr[topLeft.y][topLeft.x : bottomRight.x+1])
+  }
+
+  mid := (topLeft.y + bottomRight.y) / 2
+  midRow := arr[mid]
+
+  zeroes := CountZeroes(midRow) - 1
+  m := point{zeroes, mid}
+
+  return (m.x-topLeft.x+1)*(m.y-topLeft.y+1) +
+    countR(arr, point{topLeft.x, m.y + 1}, point{m.x, bottomRight.y}) +
+    countR(arr, point{m.x + 1, topLeft.y}, point{bottomRight.x, m.y - 1})
+}
+```
+
+What is the computational complexity of this algorithm? The CareerCup discussion of this problem said O(log N), while I guessed O(log² N). Each recursion, you do log N work to find the midpoint and then do two smaller recursions on a problem a quarter of the size.
+
+However, writing C(N²) for the complexity of an N² 2D array, solving the recursion C(N²) = log N + 2C(N²/4) yields a complexity of O(N). This is better than O(N log N) but not quite as good as O(log² N) and far worse than O(log N).
+
+A derivation is provided below:
+
+$$
+\begin{aligned}
+C(N^2) &= \log_2 N + 2C\left(\frac{N^2}{4}\right) \\
+&= \log_2 N + 2\log_2 \frac{N}{2} + 4C\left(\frac{N^2}{16}\right) \\
+&= \log_2 N + 2\log_2 \frac{N}{2} + \dots + N\log_2 \frac{N}{N} \\
+&= \sum_{k=0}^{\log_2 N} 2^k \log_2 \left(\frac{N}{2^k}\right) \\
+&= \sum_{k=0}^{\log_2 N} 2^k (\log_2 N - k) \\
+&= \log_2 N \sum_{k=0}^{\log_2 N} 2^k - \sum_{k=0}^{\log_2 N} k 2^k \\
+&= \log_2 N (2^{\log_2 N + 1} - 1) - 2(2^{\log_2 N} \log_2 N - 2^{\log_2 N} + 1) \\
+&= 2N - \log_2 N - 2 \\
+&= O(N)
+\end{aligned}
+$$
+
+What is the memory requirement? The stack grows exponentially (each recursion creates two more) but we are bound to O(log N) recursion depth, which gives a total stack memory requirement of O(N).
+
+Note that neither tail-call optimisation nor an explicit stack would help to reduce our memory requirement.
+
+### Saddleback search
+
+Can we do better? A far simpler O(N) algorithm is a [Saddleback Search](http://www.cs.utexas.edu/users/EWD/ewd09xx/EWD934.PDF).
+
+Start in the top right corner of the array. If we see a 1, move left. If we see a 0, add our current x position to a total, and then move down. Continue until we fall off the bottom or left of the array.
+
+```go
+func Count(arr [][]bool) int {
+  x := len(arr) - 1
+  y := 0
+  total := 0
+  for x >= 0 && y < len(arr) {
+    if arr[y][x] {
+      x--
+    } else {
+      total += x + 1
+      y++
+    }
+  }
+  return total
+}
+```
+
+This solution is much simpler and less error-prone than the quadtree counter. The complexity is again O(N) as the maximum number of steps we can take is 2N. It requires a small, constant amount of additional memory.
+
+### An empirical analysis of runtime
+
+How well do our theoretical runtimes match reality? I used Go’s benchmarking facility to find out.
+
+I precomputed many N² 2D array where the first row contained N 0s, the next contained N-1 0s and so on. A better set of benchmarks would also include various other patterns of 0s to get a more accurate picture of how each algorithm might perform on real world data. I created these arrays at intervals starting at 1x1 and ending at 100000x100000.
+
+Using Go’s benchmarking facility means you don’t have to write logic to perform multiple trials and average the results. This is handled for you, where quicker methods (therefore those with a potentially higher variance) are subject to more trials. When using `go test -bench`, remember to supply a RegEx as an argument to bench, as by default no benchmarks are run. Use `go test -bench .` to run all benchmarks. (I found this behaviour confusing as `go test` does not work this way).
+
+Here are the results (average time in nanoseconds):
+
+<table className="w-full table-auto text-sm border-collapse overflow-hidden rounded-lg shadow">
+  <thead className="bg-gray-100 text-gray-700 uppercase tracking-wide text-xs">
+    <tr>
+      <th className="px-3 py-2 text-left">N</th>
+      <th className="px-3 py-2 text-left">Linear</th>
+      <th className="px-3 py-2 text-left">Binary Search</th>
+      <th className="px-3 py-2 text-left">QuadTree</th>
+      <th className="px-3 py-2 text-left">Saddleback</th>
+    </tr>
+  </thead>
+  <tbody className="divide-y divide-gray-200">
+    <tr><td className="px-3 py-2">1</td><td className="px-3 py-2">6.96</td><td className="px-3 py-2">11.2</td><td className="px-3 py-2">11.5</td><td className="px-3 py-2">7.06</td></tr>
+    <tr className="bg-white/40"><td className="px-3 py-2">2</td><td className="px-3 py-2">10.8</td><td className="px-3 py-2">18.7</td><td className="px-3 py-2">32.5</td><td className="px-3 py-2">10.2</td></tr>
+    <tr><td className="px-3 py-2">5</td><td className="px-3 py-2">23.3</td><td className="px-3 py-2">44.4</td><td className="px-3 py-2">79</td><td className="px-3 py-2">18.8</td></tr>
+    <tr className="bg-white/40"><td className="px-3 py-2">10</td><td className="px-3 py-2">59.3</td><td className="px-3 py-2">95.7</td><td className="px-3 py-2">159</td><td className="px-3 py-2">33.4</td></tr>
+    <tr><td className="px-3 py-2">50</td><td className="px-3 py-2">1464</td><td className="px-3 py-2">669</td><td className="px-3 py-2">933</td><td className="px-3 py-2">163</td></tr>
+    <tr className="bg-white/40"><td className="px-3 py-2">100</td><td className="px-3 py-2">4107</td><td className="px-3 py-2">1673</td><td className="px-3 py-2">2103</td><td className="px-3 py-2">326</td></tr>
+    <tr><td className="px-3 py-2">500</td><td className="px-3 py-2">89761</td><td className="px-3 py-2">18681</td><td className="px-3 py-2">12655</td><td className="px-3 py-2">1623</td></tr>
+    <tr className="bg-white/40"><td className="px-3 py-2">1000</td><td className="px-3 py-2">352023</td><td className="px-3 py-2">48210</td><td className="px-3 py-2">37724</td><td className="px-3 py-2">3331</td></tr>
+    <tr><td className="px-3 py-2">5000</td><td className="px-3 py-2">8721353</td><td className="px-3 py-2">690117</td><td className="px-3 py-2">522126</td><td className="px-3 py-2">30804</td></tr>
+    <tr className="bg-white/40"><td className="px-3 py-2">10000</td><td className="px-3 py-2">35406766</td><td className="px-3 py-2">1741224</td><td className="px-3 py-2">1316930</td><td className="px-3 py-2">71186</td></tr>
+    <tr><td className="px-3 py-2">30000</td><td className="px-3 py-2">289993371</td><td className="px-3 py-2">6538812</td><td className="px-3 py-2">5473949</td><td className="px-3 py-2">906406</td></tr>
+    <tr className="bg-white/40"><td className="px-3 py-2">50000</td><td className="px-3 py-2">1951491919</td><td className="px-3 py-2">1034360290</td><td className="px-3 py-2">11534336</td><td className="px-3 py-2">1724967</td></tr>
+    <tr><td className="px-3 py-2">70000</td><td className="px-3 py-2">3608704183</td><td className="px-3 py-2">1549914168</td><td className="px-3 py-2">13875635</td><td className="px-3 py-2">2755737</td></tr>
+    <tr className="bg-white/40"><td className="px-3 py-2">80000</td><td className="px-3 py-2">4574500532</td><td className="px-3 py-2">2060577730</td><td className="px-3 py-2">18524247</td><td className="px-3 py-2">3385933</td></tr>
+    <tr><td className="px-3 py-2">90000</td><td className="px-3 py-2">6899882267</td><td className="px-3 py-2">1962937898</td><td className="px-3 py-2">22651835</td><td className="px-3 py-2">4002597</td></tr>
+    <tr className="bg-white/40"><td className="px-3 py-2">100000</td><td className="px-3 py-2">7178311670</td><td className="px-3 py-2">2383500531</td><td className="px-3 py-2">24857549</td><td className="px-3 py-2">4473402</td></tr>
+  </tbody>
+</table>
+
+And here are the results graphed on a lin-log plot of N against runtime:
+
+![Lin-log plot of N against runtime](/images/2016-08-31_lin-log-all.png)
+
+Finally, how can we tell whether our theoretical runtimes match up against our actual runtimes? Our runtimes shouldn’t grow faster than a linear multiple of our big-O past some size of input. Though totally unscientific, graphing our runtime against the big-O of our input size for the algorithm in question should give us some intuition as to whether our complexity is correct.
+
+Here, I’ve plotted N against the runtimes of the quadtree and Saddleback algorithms:
+
+![Plot of N against runtime for quadtree and Saddleback](/images/2016-08-31_quadtree-saddleback.png)
+
+You can view all the graphs and the data in this [Google Doc](https://docs.google.com/spreadsheets/d/1-2DoAsnsGE-Ug4OEuDlyTIBf2ajTIGWA2rHWeVYFdG8/edit?usp=sharing).
+
+### Summary
+
+I found it very satisfying that there are so many different algorithms for what is a reasonably simple problem, and doubtless there are a few more we have not yet explored (for example using a matrix multiplication, potentially on a GPU), and there are ways we could have made our other algorithms more efficient (e.g. by parallelising).
+
+We’ve also shown that our theoretical run-times match approximately against empirical measurements, and the complexity of the quadtree-esque algorithm had a complexity of O(N) rather than O(log² N) as I’d originally guessed.
+
+Thanks to my friends and colleagues who have had to listen to me ramble on about counting zeroes and ones in an array for far too long now, with not even a hint of “why would you ever want to do this.”
