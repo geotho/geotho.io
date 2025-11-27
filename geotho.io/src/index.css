@@ -88,11 +88,15 @@ body {
 }
 
 .prose ul {
-  @apply mb-5 space-y-1;
+  @apply mb-5 space-y-1 list-disc pl-6;
 }
 
 .prose li {
   @apply text-gray-800 leading-relaxed;
+}
+
+.prose ol {
+  @apply mb-5 space-y-1 list-decimal pl-6;
 }
 
 .prose strong {
