@@ -26,58 +26,58 @@ And a particularly enterprising privacy invader could use a gradient descent alg
 I used the Euclidean distance rather than the great-circle distance (we are working with distances up to 1km). Writing \( \phi \) for latitude and \( \lambda \) for longitude, the distance D between two points is approximately:
 
 $$
-\\begin{aligned}
-D(\\lambda_1, \\lambda_2, \\phi_1, \\phi_2) &\\approx R\\sqrt{(\\lambda_2-\\lambda_1)^2 + (\\phi_2-\\phi_1)^2\\cos^2\\frac{\\lambda_2+\\lambda_1}{2}}
-\\end{aligned}
+\begin{aligned}
+D(\lambda_1, \lambda_2, \phi_1, \phi_2) &\approx R\sqrt{(\lambda_2-\lambda_1)^2 + (\phi_2-\phi_1)^2\cos^2\frac{\lambda_2+\lambda_1}{2}}
+\end{aligned}
 $$
 
 Then, the partial derivatives w.r.t. one of the points are:
 
 $$
-\\begin{aligned}
-\\frac{\\partial D}{\\partial \\lambda_1} &= R\\frac{-2(\\lambda_2-\\lambda_1)-(\\phi_2-\\phi_1)^2\\cos\\frac{\\lambda_2+\\lambda_1}{2}\\sin\\frac{\\lambda_2+\\lambda_1}{2}}{\\sqrt{(\\lambda_2-\\lambda_1)^2 + (\\phi_2-\\phi_1)^2\\cos^2\\frac{\\lambda_2+\\lambda_1}{2}}} \\\\
+\begin{aligned}
+\frac{\partial D}{\partial \lambda_1} &= R\frac{-2(\lambda_2-\lambda_1)-(\phi_2-\phi_1)^2\cos\frac{\lambda_2+\lambda_1}{2}\sin\frac{\lambda_2+\lambda_1}{2}}{\sqrt{(\lambda_2-\lambda_1)^2 + (\phi_2-\phi_1)^2\cos^2\frac{\lambda_2+\lambda_1}{2}}} \\\\
 \\\\
-\\frac{\\partial D}{\\partial \\phi_1} &= R\\frac{-2(\\phi_2-\\phi_1)\\cos\\frac{\\lambda_2+\\lambda_1}{2}}{\\sqrt{(\\lambda_2-\\lambda_1)^2 + (\\phi_2-\\phi_1)^2\\cos^2\\frac{\\lambda_2+\\lambda_1}{2}}}
-\\end{aligned}
+\frac{\partial D}{\partial \phi_1} &= R\frac{-2(\phi_2-\phi_1)\cos\frac{\lambda_2+\lambda_1}{2}}{\sqrt{(\lambda_2-\lambda_1)^2 + (\phi_2-\phi_1)^2\cos^2\frac{\lambda_2+\lambda_1}{2}}}
+\end{aligned}
 $$
 
 We want to fit a circle with centre \( (\phi_c, \lambda_c) \) and radius \( r \) to our endpoints. Writing \( J(\phi_c, \lambda_c, r) \) for our cost function, we have for a set of \( m \) points \( p_i = (\lambda_i, \phi_i) \):
 
 $$
-\\begin{aligned}
-J(\\phi_c, \\lambda_c, r) = \\frac{1}{2m}\\displaystyle\\sum_{i=1}^m (D(\\lambda_i, \\lambda_c, \\phi_i, \\phi_c) - r)^2
-\\end{aligned}
+\begin{aligned}
+J(\phi_c, \lambda_c, r) = \frac{1}{2m}\displaystyle\sum_{i=1}^m (D(\lambda_i, \lambda_c, \phi_i, \phi_c) - r)^2
+\end{aligned}
 $$
 
 The partial derivatives of our cost function are therefore:
 
 $$
-\\begin{aligned}
-\\frac{\\partial J}{\\partial \\phi_c} &=
-    \\frac{1}{m}\\sum_{i=1}^m (D - r) \\frac{\\partial D}{\\partial \\phi_c}
+\begin{aligned}
+\frac{\partial J}{\partial \phi_c} &=
+    \frac{1}{m}\sum_{i=1}^m (D - r) \frac{\partial D}{\partial \phi_c}
 \\\\
 \\\\
-\\frac{\\partial J}{\\partial \\lambda_c} &=
-    \\frac{1}{m}\\sum_{i=1}^m (D - r) \\frac{\\partial D}{\\partial \\lambda_c}
+\frac{\partial J}{\partial \lambda_c} &=
+    \frac{1}{m}\sum_{i=1}^m (D - r) \frac{\partial D}{\partial \lambda_c}
 \\\\
 \\\\
-\\frac{\\partial J}{\\partial r} &=
-    \\frac{1}{m}\\sum_{i=1}^m -(D - r)
-\\end{aligned}
+\frac{\partial J}{\partial r} &=
+    \frac{1}{m}\sum_{i=1}^m -(D - r)
+\end{aligned}
 $$
 
 And each gradient descent iteration becomes (for some rate parameter \( \alpha \)):
 
 $$
-\\begin{aligned}
-\\phi_c &:= \\phi_c - \\alpha\\frac{\\partial J}{\\partial \\phi_c}
+\begin{aligned}
+\phi_c &:= \phi_c - \alpha\frac{\partial J}{\partial \phi_c}
 \\\\
 \\\\
-\\lambda_c &:= \\lambda_c - \\alpha\\frac{\\partial J}{\\partial \\lambda_c}
+\lambda_c &:= \lambda_c - \alpha\frac{\partial J}{\partial \lambda_c}
 \\\\
 \\\\
-r &:= r - \\alpha\\frac{\\partial J}{\\partial r}
-\\end{aligned}
+r &:= r - \alpha\frac{\partial J}{\partial r}
+\end{aligned}
 $$
 
 With some tweaking of the rate parameter, I managed to get the above with ~200 iterations.
