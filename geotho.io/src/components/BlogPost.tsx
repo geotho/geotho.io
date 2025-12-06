@@ -40,14 +40,14 @@ const getRelativeTime = (dateString: string): string => {
 const BlogPost: React.FC<BlogPostProps> = ({ title, date, children }) => {
   return (
     <article className="relative">
-      <h1 className="text-l font-bold">{title}</h1>
+      <h1 className="text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-2">{title}</h1>
       <time
-        className="absolute top-0 right-0 text-gray-500 text-xs font-mono bg-white/60 px-2 py-1 rounded-md backdrop-blur-sm border border-gray-200"
+        className="text-gray-600 dark:text-gray-300 text-xs font-mono bg-white/70 dark:bg-gray-800/70 px-2 py-1 rounded-md border border-gray-200 dark:border-gray-700"
         dateTime={date}
       >
         {getRelativeTime(date)}
       </time>
-      <section className="prose lg:prose-xl max-w-none pt-8 prose-headings:text-gray-900 prose-headings:font-bold prose-headings:tracking-tight prose-p:text-gray-800 prose-p:leading-relaxed prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:text-indigo-500 prose-a:transition-colors prose-li:text-gray-800 prose-strong:text-gray-900 prose-code:text-pink-600 prose-code:bg-white/60 prose-code:px-1 prose-code:rounded">
+      <section className="prose lg:prose-lg max-w-none pt-6 dark:prose-invert prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-headings:font-semibold prose-p:text-gray-800 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:text-indigo-500 dark:hover:prose-a:text-indigo-300 prose-li:text-gray-800 dark:prose-li:text-gray-300 prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-code:text-rose-600 dark:prose-code:text-rose-400 prose-code:bg-amber-50 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:rounded prose-pre:bg-gray-50 dark:prose-pre:bg-gray-900 prose-pre:text-gray-900 dark:prose-pre:text-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700 prose-img:rounded-lg prose-img:shadow-sm">
         {children}
       </section>
     </article>
