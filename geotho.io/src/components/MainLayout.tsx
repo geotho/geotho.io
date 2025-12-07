@@ -56,7 +56,7 @@ const ThemeToggle = () => {
 const MainLayout = () => {
   return (
     <div className="min-h-screen text-gray-900 dark:text-gray-100">
-      <header className="py-6 px-4 sm:px-6 lg:px-8 border-b border-gray-200 dark:border-gray-800 bg-white/40 dark:bg-black/20 backdrop-blur-md sticky top-0 z-10 transition-colors duration-300">
+      <header className="py-6 px-4 sm:px-6 lg:px-8 bg-white/40 dark:bg-black/20 backdrop-blur-md sticky top-0 z-10 transition-colors duration-300">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-baseline space-x-8">
             <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">

@@ -44,6 +44,18 @@ import IntegerOverflowContent from "./posts/2017-07-03-integer-overflow.mdx";
 import integerOverflowRaw from "./posts/2017-07-03-integer-overflow.mdx?raw";
 import UnittestNondeterminismContent from "./posts/2017-08-02-unittest-nondeterminism.mdx";
 import unittestNondeterminismRaw from "./posts/2017-08-02-unittest-nondeterminism.mdx?raw";
+import WeightedSamplingContent from "./posts/2018-08-26-weighted-sampling.mdx";
+import weightedSamplingRaw from "./posts/2018-08-26-weighted-sampling.mdx?raw";
+import JekyllToHugoContent from "./posts/2020-05-28-jekyll-to-hugo.mdx";
+import jekyllToHugoRaw from "./posts/2020-05-28-jekyll-to-hugo.mdx?raw";
+import UniformRandomSelectionFromChannelContent from "./posts/2020-06-29-uniform-random-selection-from-channel.mdx";
+import uniformRandomSelectionFromChannelRaw from "./posts/2020-06-29-uniform-random-selection-from-channel.mdx?raw";
+import WhatILearntDataScienceToolingContent from "./posts/2020-08-09-what-i-learnt-data-science-tooling.mdx";
+import whatILearntDataScienceToolingRaw from "./posts/2020-08-09-what-i-learnt-data-science-tooling.mdx?raw";
+import ApproachForSystemDesignInterviewsContent from "./posts/2020-08-12-approach-for-system-design-interviews.mdx";
+import approachForSystemDesignInterviewsRaw from "./posts/2020-08-12-approach-for-system-design-interviews.mdx?raw";
+import RecordFrictionToBuildQualitySoftwareContent from "./posts/2020-08-31-record-friction-to-build-quality-software.mdx";
+import recordFrictionToBuildQualitySoftwareRaw from "./posts/2020-08-31-record-friction-to-build-quality-software.mdx?raw";
 import HelloWorldContent from "./posts/hello-world.mdx";
 import helloWorldRaw from "./posts/hello-world.mdx?raw";
 import SoyToryContent from "./posts/soy-tory.mdx";
@@ -165,6 +177,36 @@ const allPosts: Post[] = [
     slug: "2017-08-02-unittest-nondeterminism",
     attributes: fm<PostAttributes>(unittestNondeterminismRaw).attributes,
     Content: UnittestNondeterminismContent,
+  },
+  {
+    slug: "2018-08-26-weighted-sampling",
+    attributes: fm<PostAttributes>(weightedSamplingRaw).attributes,
+    Content: WeightedSamplingContent,
+  },
+  {
+    slug: "2020-05-28-jekyll-to-hugo",
+    attributes: fm<PostAttributes>(jekyllToHugoRaw).attributes,
+    Content: JekyllToHugoContent,
+  },
+  {
+    slug: "2020-06-29-uniform-random-selection-from-channel",
+    attributes: fm<PostAttributes>(uniformRandomSelectionFromChannelRaw).attributes,
+    Content: UniformRandomSelectionFromChannelContent,
+  },
+  {
+    slug: "2020-08-09-what-i-learnt-data-science-tooling",
+    attributes: fm<PostAttributes>(whatILearntDataScienceToolingRaw).attributes,
+    Content: WhatILearntDataScienceToolingContent,
+  },
+  {
+    slug: "2020-08-12-approach-for-system-design-interviews",
+    attributes: fm<PostAttributes>(approachForSystemDesignInterviewsRaw).attributes,
+    Content: ApproachForSystemDesignInterviewsContent,
+  },
+  {
+    slug: "2020-08-31-record-friction-to-build-quality-software",
+    attributes: fm<PostAttributes>(recordFrictionToBuildQualitySoftwareRaw).attributes,
+    Content: RecordFrictionToBuildQualitySoftwareContent,
   },
   {
     slug: "hello-world",

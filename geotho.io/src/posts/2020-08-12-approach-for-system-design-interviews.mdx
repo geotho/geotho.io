@@ -1,0 +1,209 @@
+---
+title: "An approach for system design interviews"
+date: "2020-08-12"
+---
+
+## What is a system design interview? 🤔
+
+Tech companies sometimes ask for system design interviews.
+These assess a few different areas, including:
+
+- extracting concrete requirements from loose specifications;
+- estimations;
+- making tradeoffs between different technologies or requirements;
+- knowledge of different subsystems (cloud platforms, container orchestrators, queuing systems...);
+- ability to produce a feasible design that meets business requirements.
+
+## Why do I need a structured approach? 🤷🏻‍♂️
+
+Unlike coding interviews, system design interviews benefit much more
+from a structured approach. A structured approach will ensure:
+
+- you feel confident in yourself, and thus appear confident to your interviewer;
+- you demonstrate knowledge across all the axes your interviewer cares about;
+- you are likely to produce a high-coverage design
+  (one that handles all the requirements);
+- interviewers are expecting you to lead the discussion, which is difficult to
+  do if you don't have a structure.
+
+## A structured approach for system design interviews 🗼
+
+Here's a high-level approach. I'll go into each area separately:
+
+1. Analyse requirements
+2. Approximate quantitatively
+3. Design data stores
+4. Produce high-level architecture
+5. Dive-deep into problem specifics
+6. Consider tradeoffs
+7. Map back to the original requirements
+
+### 1. Analyse requirements ✍🏼
+
+A system design question might be something like "design WhatsApp" or
+"design YouTube" or "design bicycle hire". It is impossible to cover all
+the features of those systems in the 40~60 minutes you'll have.
+
+Instead, spend some time precisely defining the scope of your solution.
+Think about the core user stories when interacting with the app.
+
+Examples:
+
+- "Design YouTube": upload videos; watch video; browse videos.
+- "Design bicycle hire": hire bicycle; return bicycle; find bicycles; journey billing.
+
+Make sure that somewhere on your whiteboard / Google Drawing you've itemised a
+list of requirements.
+
+Ensure you ask your interviewer if there are any additional requirements they'd
+like you to cover that you may have missed.
+
+### 2. Approximate quantitatively 🔢
+
+Next, produce some "back of the envelop" calculations.
+
+You want to produce approximations for numbers like:
+
+- how many monthly active users (MAU) your service might have;
+- how many queries per second (QPS) you might have to serve;
+- how much bandwidth your service might require;
+- how the quantity of data you store might grow over time;
+- how many machines you might require to meet the desired bandwidth / QPS.
+
+Some useful rules and numbers to know are:
+
+- ["Jeff Dean's Numbers Everyone Should Know"](http://brenocon.com/dean_perf.html)
+- [1% rule: 99% of users are lurkers](https://en.wikipedia.org/wiki/1%25_rule_(Internet_culture))
+- There are 86 400 seconds in a day.
+
+### 3. Design data stores 💾
+
+What data are you going to store, and how you are going to store it?
+
+Things you'll want to consider:
+
+- How much data are we storing?
+- How frequently will we need to read or write the data?
+- Is the data structured or unstructured?
+- How might we need to search or index the data?
+- How does the data vary in size or format?
+- What availability and consistency guarantees do we want to provide?
+
+Some reoccuring areas you'll want to consider:
+
+- [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem) — how do you trade off consistency against availability?
+- [Time-of-check to time-of-use (TOCTOU)](https://en.wikipedia.org/wiki/Time-of-check_to_time-of-use)
+- [Read your writes consistency](https://jepsen.io/consistency/models/read-your-writes)
+
+### 4. Produce high-level architecture 🗺
+
+Your requirements analysis should state your data sources, and your data store design tells you where your data lives. Your high-level architecture connects
+these together.
+
+Produce a diagram with your sources (or clients) on the left, and your sinks
+somewhere on the right. Then fill in the middle with whatever servers, load balancers, computer clusters, queuing systems etc. you might need.
+
+You might want to consider:
+
+- your application code execution environment;
+- what parts of your system need to run synchronously (i.e. within the lifetime
+  of a request) and which can be run asynchronously;
+- whether you need batch or nightly jobs, and how you might execute those;
+
+At a minimum you'll probably have:
+
+- Some horizontally scalable group of application servers (e.g. AWS EC2 ASGs, or Kubernetes Pods)
+- A load balancer to distribute requests between your application servers
+
+Then you might want to add things depending on your requirements:
+
+- **queuing systems** for message passing or
+  asynchronous processing like RabbitMQ, Kafka or Kinesis;
+- **blob stores**, like S3;
+- **SQL databases**, like Postgres, MySQL or SQL Server;
+- Horizontally scalable **NoSQL databases**, like DynamoDB, BigTable, or Cassandra
+- **Caches**, like Redis or memcached;
+- High availability **config stores**, like ZooKeeper or etcd;
+- **Analytics databases** like BigQuery or Redshift;
+- **Search servers** like ElasticSearch or Solr.
+
+Only mention technologies where you understand the tradeoffs they make. Unless
+you explicitly say something like "I would investigate X as I have never used it
+directly". **Don't just name drop technologies that you think will sound smart**.
+
+You will also want to talk about the interfaces between each of your components.
+Will you use raw TCP or UDP, or HTTP, or gRPC, or Thrift?
+What schemas / message bodies do you use?
+
+### 5. Deep-dive into problem-specific issues 🧰
+
+Here is an opportunity to demonstrate your understanding of the technical
+or business problems that might arise in your system, and how you deal with them.
+
+Some generic issues are things like:
+
+- How would you scale the system to serve more requests?
+- What are the load characteristics of the system? Do you have hot keys when
+  e.g. a video goes viral? How do you deal with spiky load?
+- How might the system break? Where are your single-point-of-failures?
+
+Your specific system might have particular issues:
+
+- Video platform
+  - Illegal content
+  - Copywrite infringement
+  - Duplicate videos
+- Messaging systems
+  - Privacy
+  - Abuse and blocking
+- Payments systems
+  - Handling PII and SPII
+  - Certifications e.g. ISO27001
+  - KYC and AML checks (and OFAC lists and SDN lists and...)
+
+You should volunteer any problems you can think of to your interviewer.
+Part of the assessment criteria will be your ability to anticipate and mitigate
+potential future risks.
+
+### 6. Consider tradeoffs ⚖️
+
+There are probably other systems you could have designed that would have
+met your requirements. How else could you have designed the system? What would
+have changed?
+
+For example, you might suggest NoSQL vs SQL data stores. But that might impact
+data consistency because you might lack database transactions.
+
+Or you might suggest asynchronous rather than synchronous processing, but now you
+need an email server to notify users when their job is done.
+
+### 7. Map back to the original requirements 🏆
+
+Finally, read over your initial requirements and briefly note how your design
+meets them.
+
+## Common misconceptions 🎭
+
+Finally, I'll like to go over some common misconceptions of people doing system
+design interviews.
+
+> "I've never used Redis, BigQuery, RabbitMQ, etc. so I will do badly at system design interviews."
+
+Though system design interviews are assessing the breadth of your knowledge,
+that's only one axis. There are plenty of other factors at play, and the
+approach as suggested with help you expose them to the best of your ability.
+
+> Coding interviews require less preparation than system design interviews
+
+I think both require adequate preparation. I also think system design is much
+more difficult to prepare for, because there's no automated test suite available
+to validate your design.
+
+## Conclusion 🔚
+
+System design interviews are a great way to demonstrate your experience.
+Use them to highlight your breadth of knowledge, business accumen and
+ability to anticpate and mitigate failure.
+
+These skills are more difficult to assess than coding, so use a structured
+approach like the one presented above to maximise your chance of success.

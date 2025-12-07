@@ -1,0 +1,92 @@
+---
+title: "Record 'friction' to build quality software"
+date: "2020-08-31"
+---
+
+When was the last time you were consciously impressed by the quality of
+some software?
+
+It might have been a particularly helpful error message — one that explained
+what you were doing wrong and how you might fix it.
+Or a testing library whose assertions were clear and transparent.
+Or a service mesh whose installation worked first time.
+
+Quality in software doesn't appear by accident. It takes a great deal of effort
+to make a good developer experience.
+
+One strategy to dramatically and deliberately increase quality is to document
+'friction' when people use your software. This can then inform your product roadmap.
+
+Enter: the *friction doc*.
+
+## What is a 'friction doc'? 🤷🏻‍♀️
+
+A friction doc is a durable record of issues that your users encountered while
+trying to use your software.
+
+Encourage your users to record difficulties as they encounter them.
+Then schedule a follow-up where your user can share their friction doc with you.
+
+Friction docs are to developer experience what code review is to PRs.
+
+Any piece of software can have a friction doc: APIs and SDKs, command line
+tools, server infrastructure, even documentation and tutorials.
+
+## Tips for writing friction docs ✍🏼
+
+If you've been asked to write a friction doc,
+the following tips might be useful.
+
+### 1. Keep it factual 🔢
+
+Write sentences of the form "When I tried to do X, Y happened instead. I assumed
+Z, which turned out to be incorrect." Avoid being emotive
+(e.g. "This is disappointing") as it is likely to dilute your issue.
+
+### 2. Do it live 📺
+
+Keep a running doc and record issues as they come up.
+Often, you'll encounter some issue, realise it was due to some misunderstanding,
+and then disregard it with hindsight bias.
+But the point of the friction doc is to record these misunderstandings so they
+can be fixed for the next person. So record them as they come up.
+
+### 3. Provide suggestions, not solutions 🔮
+
+The old adage goes "Don't bring me problems; bring me solutions!"
+
+It is helpful to provide suggestions to mitigate the friction
+(e.g. "the error message could be more informative if it mentioned X").
+But remember:
+
+1. The author of the software may have thought about the problem already;
+2. There may be good reasons that what you are suggesting is unworkable
+   (see [Chesterton's Fence]).
+
+So when making suggestions for fixes, be mindful that there may be other aspects
+of the problem that you haven't yet considered.
+
+### 4. If you've noticed it, it's big enough to include 🐛
+
+Don't feel bad about recording nits, typos or small bugs. If they are minor,
+they should be easy to fix. There's a bit of [broken windows theory] here:
+how much would you trust software that had misspellings in its outputs?
+
+### 5. Be kind! 😇
+
+Remember that you're providing feedback to help make the software better.
+
+Some specific pointers on being kind:
+
+- **Don't surprise the recipient** — Instead, ask "Hey, I usually make notes
+  on the things I found difficult when using new software. Would you mind if I
+  shared it with you when I am done?"
+- **Share your feedback in person or via VC** — It's easier for comments to be
+  misinterpreted when they are read rather than spoken. Your feedback might come
+  across harsher than intended if presented only as a document / email.
+- **Read your notes back before you send them** — If you must feedback via text,
+  read through your notes before sending them on. Check whether any of the
+  comments can be intrepreted in a less charitable fashion.
+
+[Chesterton's Fence]: https://en.wikipedia.org/wiki/Wikipedia:Chesterton%27s_fence
+[broken windows theory]: https://en.wikipedia.org/wiki/Broken_windows_theory

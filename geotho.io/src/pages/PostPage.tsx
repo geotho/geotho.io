@@ -18,7 +18,7 @@ const PostPage = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="w-full bg-white/80 dark:bg-gray-900/70 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 backdrop-blur">
       <BlogPost title={post.attributes.title} date={post.attributes.date}>
         <post.Content />
       </BlogPost>

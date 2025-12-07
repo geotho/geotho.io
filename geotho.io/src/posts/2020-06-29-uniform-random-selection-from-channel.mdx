@@ -1,0 +1,89 @@
+---
+title: "Uniform random selection from a channel"
+date: "2020-06-29"
+---
+
+Selecting a item uniformly at random from an array is quite easy:
+
+```go
+func randomPickSlice(items []string) string {
+  i := rand.Intn(len(items))
+  return items[i]
+}
+```
+
+How could we do this with a channel, rather than a slice?
+
+One way would be simply to read items to a slice first, then use `randomPickSlice`:
+
+```go
+func randomPickChan(items <-chan string) string {
+  var allItems []string
+  for s := range items {
+    allItems = append(allItems, s)
+  }
+
+  return randomPickSlice(allItems)
+}
+```
+
+But this requires us to store all the items in memory at the same time, which might not be possible. Can we do better?
+
+## Using O(1) space
+
+Rather than storing all the elements we've ever seen, let's just persist a "chosen-one" candidate. We'll initialise the candidate to be the first item from the channel. Then, whenever we see a new item from the channel, we could choose whether to stick with the old candidate or replace the candidate with the new value. Once we exhaust the channel, we return the candidate.
+
+How do we decide whether to stick or swap?
+
+We could do a 50/50 coin-flip each time. But this doesn't select uniformly at random: the chance of returning the first item after seeing n items is $\\frac{1}{2^{n-1}}$.
+
+Instead, we can maintain a counter `k` of the items we've seen so far. And for every new item, we can either pick it with probability `1/k` or stick with the old thing with probability `1-1/k` or `(k-1)/k`.
+
+How can we prove that any candidate value is selected uniformly at random i.e. with probability `1/n`?
+
+### An inductive proof
+
+We have to prove:
+1. That the base-case holds.
+2. That the k+1th case holds if the kth case holds.
+
+Our base-case is that of the 1-element channel. Because we initialise the candidate to be the first element, and because there are no other elements to swap it out for, we return the first element with probability 1. ✅
+
+Let's assume that the kth-case holds. So we have seen `k` items and our candidate has been selected with probability `1/k`.
+
+When we see the k+1th item, we either swap out our candidate with probability `1/k+1`, or stick with our current candidate with probability `1-(1/k+1)`.
+
+If we swap it out, then the new candidate will have been selected with probability `1/k+1`.
+
+If we stick with the current candidate, it has now been selected with a probability:
+
+$$
+\\frac{1}{k}(1-\\frac{1}{k+1}) =
+\\frac{1}{k}(\\frac{k}{k+1}) =
+\\frac{1}{k+1}
+$$
+
+So whether we stick or swap, we're left with a candidate that has been selected with probability `1/k+1`. ✅
+
+### What does the code look like?
+
+```go
+func randomPickChan(items <-chan string) string {
+  k := 1
+  candidate := <-items
+
+  for i := range items {
+    k++
+    r := rand.Intn(k)
+    if r == 0 { // or equivalently r == k-1
+      candidate = i
+    }
+  }
+
+  return candidate
+}
+```
+
+### Can we do better?
+
+I'd be surprised and very interested to hear. I guess if you knew how many values there would be in total, you could just pick a `p` such that `0 <= p < n`, throw away the first `p` values and return the p-th one immediately.

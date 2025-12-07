@@ -37,6 +37,18 @@ const getRelativeTime = (dateString: string): string => {
   }
 };
 
+const proseClasses = [
+  "prose lg:prose-lg max-w-none pt-6 dark:prose-invert",
+  "prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-headings:font-semibold",
+  "prose-p:text-gray-800 dark:prose-p:text-gray-300 prose-p:leading-relaxed",
+  "prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:text-indigo-500 dark:hover:prose-a:text-indigo-300",
+  "prose-li:text-gray-800 dark:prose-li:text-gray-300",
+  "prose-strong:text-gray-900 dark:prose-strong:text-gray-100",
+  "prose-code:text-rose-600 dark:prose-code:text-rose-400 prose-code:bg-amber-50 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:rounded",
+  "prose-pre:bg-gray-50 dark:prose-pre:bg-gray-900 prose-pre:text-gray-900 dark:prose-pre:text-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700",
+  "prose-img:rounded-lg prose-img:shadow-sm",
+].join(" ");
+
 const BlogPost: React.FC<BlogPostProps> = ({ title, date, children }) => {
   return (
     <article className="relative">
@@ -47,7 +59,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ title, date, children }) => {
       >
         {getRelativeTime(date)}
       </time>
-      <section className="prose lg:prose-lg max-w-none pt-6 dark:prose-invert prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-headings:font-semibold prose-p:text-gray-800 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:text-indigo-500 dark:hover:prose-a:text-indigo-300 prose-li:text-gray-800 dark:prose-li:text-gray-300 prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-code:text-rose-600 dark:prose-code:text-rose-400 prose-code:bg-amber-50 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:rounded prose-pre:bg-gray-50 dark:prose-pre:bg-gray-900 prose-pre:text-gray-900 dark:prose-pre:text-gray-100 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700 prose-img:rounded-lg prose-img:shadow-sm">
+      <section className={proseClasses}>
         {children}
       </section>
     </article>

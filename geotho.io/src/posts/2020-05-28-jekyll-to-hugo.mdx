@@ -1,0 +1,22 @@
+---
+title: "Jekyll to Hugo"
+date: "2020-05-28"
+---
+
+I've ported my blog from Jekyll to Hugo.
+
+## Why?
+
+1. I couldn't build the old Ruby stack anymore.
+2. I like Go, and Hugo is written in Go.
+
+## What changed?
+
+1. Theme changed.
+2. Source code of blog lives in [geotho/hugo][hugo].
+3. GitHub Actions [builds and commits][workflow] the built blog to [geotho/geotho.github.io][github.io].
+4. Switched to $\\KaTeX$ from MathJax.
+
+[hugo]: https://github.com/geotho/hugo
+[workflow]: https://github.com/geotho/hugo/blob/master/.github/workflows/main.yml
+[github.io]: https://github.com/geotho/geotho.github.io

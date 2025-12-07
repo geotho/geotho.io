@@ -1,0 +1,186 @@
+---
+title: "What I learnt writing machine learning tooling"
+date: "2020-08-09"
+---
+
+## Project overview 🐟
+
+I spent about a year working on machine learning tooling.
+The goals of the project were:
+
+1. Shorten time from a prototype (typically a Jupyter Notebook)
+   to production code.
+2. Unify access to production data, providing security, auditability and
+   telemetry.
+3. Provide a secure, scalable, multi-tenant platform for hosting models,
+   potentially from third-party users.
+
+## Technology learnings 👩🏻‍💻
+
+We built a system on top of Kubernetes for model storing and serving.
+We wrote libraries and command line utilities which allowed data scientists to
+more easily containerise their code.
+
+Here are some things I would think twice about if I had to do the project again.
+
+### 1. Write command line utilities in something other than Python 🐍
+
+We initially thought it would be useful to write our command line utilities in Python because:
+1. Our users typically use Python, so could reuse our code in their own scripts.
+2. The source code is editable, so users could self-serve bug fixes.
+
+However, (1) was more of a curse than a blessing,
+and (2) wasn't as useful as we first thought.
+
+Distributing apps written in Python [remains an unsolved problem](https://xkcd.com/1987/).
+By default, `pip install` uses a system-level dependency cache.
+When you `pip install` two different projects that require different
+versions of the same dependency (e.g. `requests`), `pip` uninstalls one to
+install the other.
+
+Data scientists are probably already circumventing this problem by using
+VirtualEnv, Conda or poetry. But making your command line utility work with
+all flavours of these — and working out which environment the utility should be
+installed into — can be tricky.
+
+👍 **Learning:** use a language that you can easily cross-compile to a statically-linked binary. Go or Rust are good candidates here.
+
+### 2. If using Docker, provide good support 🚢
+
+If you're enabling data scientists to containerise and deploy models, you're
+likely using Docker.
+
+It's useful to have a deep understanding of how Docker works, but your users may
+not share your understanding.
+
+Some recurring issues that our users encountered were:
+
+- installing dependencies during `docker build` from private Git repos;
+- "no space left on device" when using Docker on OS X;
+- using `docker run -it <container-id> /bin/bash` to debug a failing `docker build`;
+- inadvertantly creating massive build contexts and not using `.dockerignore`;
+- typical `Dockerfile` gotachas, including:
+  - leveraging caching by putting the commonly-rerun steps at the end;
+  - using builder images to reduce image size;
+  - leaving private credentials accessible in the resulting image.
+
+👍 **Learning:** Be aware of how much implicit knowledge is required to be
+productive using Docker. Plan to fill this gap with docs or training.
+
+### 3. Think carefully about Kubernetes testing strategies ⛵️
+
+We wrote tools that deployed containers and services into a Kubernetes cluster
+(also using Istio as a service mesh). We wanted to write integration tests that
+covered all features in our offering:
+
+- building and running Docker containers;
+- deploying the containers on a Kubernetes cluster;
+- managed access to external data resources;
+- model execution.
+
+On each CI run, we span-up a Kubernetes cluster (initially Minikube, then
+MicroK8s, then KinD 🤦🏻‍♂️) and installed Istio. Our CI execution time quickly
+ballooned to ~30 minutes.
+
+An alternative would be to test continuously in a non-production environment.
+
+I'd like to investigate an approach where CI runs separately for cluster-setup
+scripts and application code, and CI by default runs against a preexisting
+cluster.
+
+👍 **Learning:** It is difficult to naively test applications that interact with
+Kubernetes in a CI-acceptable timeframe. It's worth investing in innovative
+approaches here.
+
+## People learnings
+
+I also learnt more about the non-coding parts of building technology.
+
+### 1. Build a product your users love 💌
+
+I agree with Paul Graham: [make something people want](http://www.paulgraham.com/good.html). This is as true within larger companies as it is in startups.
+
+Treat your software as a product. Treat your users as customers. Even if they
+are internal.
+
+Start by making a small pool of users very happy and more productive.
+This leads to traction and buy-in across an organisation.
+
+👍 **Learning:** Build software your users love to maximise traction.
+
+### 2. Get feedback early ⏰
+
+Getting feedback early is the best way to ensure you're building something
+people want.
+
+We got some elements of the user experience wrong. Focus on being wrong quickly.
+Users are good are telling you want they don't want, or what doesn't work for
+them. The quicker you finish building the wrong thing, the earlier you can start
+building the right thing.
+
+Some ways of acquiring feedback, in approximate order of efficacy:
+
+1. Pair programming / watching users use the software
+2. Answering users' questions / debugging their painpoints
+3. Ask users to document friction as they use the software
+
+👍 **Learning:** There's a high likelihood that parts of your user experience
+are suboptimal. Figure out which by prototyping functionality and observing users.
+
+### 3. Encourage public question asking 📣
+
+Many users ask questions or raise issues privately i.e. through email or Slack
+direct message etc. They might do this because:
+
+1. You specifically have helped them with an issue in the past.
+2. They're afraid of asking a "dumb question" publicly.
+
+This behaviour should be discouraged. Instead, create a public Slack channel,
+mailing list or JIRA board where users can raise issues.
+
+This has many advantages:
+
+1. It reduces the [bus factor](https://en.wikipedia.org/wiki/Bus_factor).
+2. Issues / friction / painpoints in the tooling become visible to the whole team.
+3. Solutions to reoccuring questions can be reused (via FAQs).
+4. Users can help each other with questions.
+
+👍 **Learning:** Encourage users to ask questions publicly. The benefits will
+save time and help build a better product.
+
+## Here be dragons 🐲
+
+Our work only dealt with synchronous streaming use cases. There's a whole
+universe of machine learning tooling that was out of scope for us.
+
+I've highlighted a few interesting areas of exploration.
+
+### Data lineage 📚
+
+How do you keep track of what data went into building a model?
+If you sample data, how can you build confidence in your sampling algorithms
+and reproducibility?
+Could you retrain the exact same model from scratch if necessary?
+
+[Pachyderm](https://www.pachyderm.com/) looks like they are doing interesting
+things in this area.
+
+### Distributed model training 🏋🏻‍♂️
+
+Spark clusters tend to be a constant source of reoccuring pain here.
+
+Should data scientists be responsible for spinning up (and turning down!) a new
+cluster for every training job?
+
+How would this work in a continuous training (CT) environment?
+
+Should those same data scientists own the infra necessary for creating Spark
+clusters? It's not part of their core job description. But if another team
+(e.g. SRE) owns it but doesn't use it, how will they be incentivised to fix
+the problems?
+
+If you want to reuse a persistent cluster, how do you handle scheduling and
+dependency management?
+
+It's worth considering Apache Beam and Kubeflow Pipelines as alternatives.
+But the amount of infra necessary seems [gargantuan](https://cloud.google.com/solutions/machine-learning/architecture-for-mlops-using-tfx-kubeflow-pipelines-and-cloud-build).
