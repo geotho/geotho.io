@@ -6,6 +6,7 @@ import PostPage from "./pages/PostPage";
 import ToolsIndexPage from "./pages/ToolsIndexPage";
 import GradientGenerator from "./tools/GradientGenerator";
 import HelloWorld from "./tools/HelloWorld";
+import MujiShelfConfigurator from "./tools/MujiShelfConfigurator";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
           {
             path: "gradient-generator",
             element: <GradientGenerator />,
+          },
+          {
+            path: "muji-shelf-configurator",
+            element: <MujiShelfConfigurator />,
           },
         ],
       },

@@ -11,6 +11,11 @@ const tools = [
     path: "tailwind-css-gradient-generator",
     description: "Create beautiful gradients with Tailwind CSS.",
   },
+  {
+    name: "Muji Shelf Configurator",
+    path: "muji-shelf-configurator",
+    description: "Visualise and configure Muji shelves to scale.",
+  },
 ];
 
 const ToolsIndexPage = () => {
