@@ -74,8 +74,6 @@ interface UndoNotice {
   message: string;
 }
 
-const SCALE = 2; // Pixels per cm
-
 const MujiShelfConfigurator: React.FC = () => {
   const [assemblies, setAssemblies] = useState<Assembly[]>([]);
   // Store tuple of [assemblyIndex, side ('left'|'right')] or null
@@ -328,7 +326,7 @@ const MujiShelfConfigurator: React.FC = () => {
 
   const UNIT_PX = 84; // Fixed pixel size per 1x1 unit for perfect alignment
 
-  const renderGridLines = (width: number, height: number, rows: number, cols: number) => {
+  const renderGridLines = (rows: number, cols: number) => {
       const lines = [];
       const thickness = 4;
       const colorClass = "bg-[#5D4037] dark:bg-[#8D6E63]";
@@ -404,7 +402,7 @@ const MujiShelfConfigurator: React.FC = () => {
             title={product.name}
         >
             {/* Grid Lines */}
-            {renderGridLines(widthPx, heightPx, dims.rows, dims.cols)}
+            {renderGridLines(dims.rows, dims.cols)}
 
             {/* Label */}
             <div className="text-center p-1 w-full truncate px-2 relative z-10 pointer-events-none">
