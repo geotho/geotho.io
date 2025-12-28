@@ -162,35 +162,38 @@ const MujiShelfConfigurator: React.FC = () => {
   };
 
   const toggleRotation = (index: number) => {
-    setAssemblies(prev => {
-      const newAssemblies = [...prev];
-      const assembly = newAssemblies[index];
-      if (!assembly) return prev;
+    const assemblySnapshot = assemblies[index];
+    if (!assemblySnapshot) return;
+    const removedAddons = Boolean(assemblySnapshot.leftAddon || assemblySnapshot.rightAddon);
 
-      const removedAddons = Boolean(assembly.leftAddon || assembly.rightAddon);
-      if (removedAddons) {
-        setUndoNotices(notices => ({
-          ...notices,
-          [assembly.id]: {
-            prevBaseProduct: assembly.baseProduct,
-            prevLeftAddon: assembly.leftAddon,
-            prevRightAddon: assembly.rightAddon,
-            prevRotated: assembly.rotated,
-            message: 'Rotation removed add-ons.'
-          }
-        }));
-        assembly.leftAddon = null;
-        assembly.rightAddon = null;
-      } else {
-        setUndoNotices(notices => {
-          const next = { ...notices };
-          delete next[assembly.id];
-          return next;
-        });
-      }
-      assembly.rotated = !assembly.rotated;
-      return newAssemblies;
-    });
+    setAssemblies(prev => prev.map((assembly, idx) => {
+      if (idx !== index) return assembly;
+      return {
+        ...assembly,
+        rotated: !assembly.rotated,
+        leftAddon: removedAddons ? null : assembly.leftAddon,
+        rightAddon: removedAddons ? null : assembly.rightAddon
+      };
+    }));
+
+    if (removedAddons) {
+      setUndoNotices(notices => ({
+        ...notices,
+        [assemblySnapshot.id]: {
+          prevBaseProduct: assemblySnapshot.baseProduct,
+          prevLeftAddon: assemblySnapshot.leftAddon,
+          prevRightAddon: assemblySnapshot.rightAddon,
+          prevRotated: assemblySnapshot.rotated,
+          message: 'Rotation removed add-ons.'
+        }
+      }));
+    } else {
+      setUndoNotices(notices => {
+        const next = { ...notices };
+        delete next[assemblySnapshot.id];
+        return next;
+      });
+    }
     setOpenMenu(null);
   };
 
