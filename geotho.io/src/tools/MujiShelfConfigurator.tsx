@@ -23,9 +23,9 @@ const PRODUCTS: Product[] = [
   { id: 'narrow-5', name: 'Narrow 5', width: 42, depth: 28.5, height: 200, price: 219.00, type: 'base', rotatable: true, rows: 5, cols: 1 },
 
   // Wide Units (1 Column)
-  { id: 'wide-2', name: 'Wide 2', width: 81.5, depth: 28.5, height: 81.5, price: 199.00, type: 'base', rotatable: true, rows: 2, cols: 1 },
-  { id: 'wide-3', name: 'Wide 3', width: 81.5, depth: 28.5, height: 121, price: 229.00, type: 'base', rotatable: true, rows: 3, cols: 1 },
-  { id: 'wide-5', name: 'Wide 5', width: 81.5, depth: 28.5, height: 200, price: 279.00, type: 'base', rotatable: true, rows: 5, cols: 1 },
+  { id: 'wide-2', name: 'Wide 2', width: 81.5, depth: 28.5, height: 81.5, price: 199.00, type: 'base', rotatable: true, rows: 2, cols: 2 },
+  { id: 'wide-3', name: 'Wide 3', width: 81.5, depth: 28.5, height: 121, price: 229.00, type: 'base', rotatable: true, rows: 3, cols: 2 },
+  { id: 'wide-5', name: 'Wide 5', width: 81.5, depth: 28.5, height: 200, price: 279.00, type: 'base', rotatable: true, rows: 5, cols: 2 },
 
   // 2-Column Grids (3x2, 5x2)
   { id: 'grid-3-2', name: 'Grid 3x2', width: 82, depth: 28.5, height: 121, price: 299.00, type: 'grid', rotatable: true, rows: 3, cols: 2 },
@@ -37,11 +37,11 @@ const PRODUCTS: Product[] = [
 
 
   // Add Ons
-  { id: 'addon-wide-5', name: 'Oak Wide 5 Shelf - Add On', width: 79.5, depth: 28.5, height: 200, price: 249.00, type: 'addon', rows: 5, cols: 1 },
+  { id: 'addon-wide-5', name: 'Oak Wide 5 Shelf - Add On', width: 79.5, depth: 28.5, height: 200, price: 249.00, type: 'addon', rows: 5, cols: 2 },
   { id: 'addon-narrow-5', name: 'Oak Narrow 5 Shelf - Add On', width: 40, depth: 28.5, height: 200, price: 199.00, type: 'addon', rows: 5, cols: 1 },
   { id: 'addon-narrow-3', name: 'Oak Narrow 3 Shelf - Add On', width: 40, depth: 28.5, height: 121, price: 169.00, type: 'addon', rows: 3, cols: 1 },
-  { id: 'addon-wide-3', name: 'Oak Wide 3 Shelf - Add On', width: 79.5, depth: 28.5, height: 121, price: 219.00, type: 'addon', rows: 3, cols: 1 },
-  { id: 'addon-wide-2', name: 'Oak Wide 2 Shelf - Add On', width: 79.5, depth: 28.5, height: 81.5, price: 179.00, type: 'addon', rows: 2, cols: 1 },
+  { id: 'addon-wide-3', name: 'Oak Wide 3 Shelf - Add On', width: 79.5, depth: 28.5, height: 121, price: 219.00, type: 'addon', rows: 3, cols: 2 },
+  { id: 'addon-wide-2', name: 'Oak Wide 2 Shelf - Add On', width: 79.5, depth: 28.5, height: 81.5, price: 179.00, type: 'addon', rows: 2, cols: 2 },
   { id: 'addon-narrow-2', name: 'Oak Narrow 2 Shelf - Add On', width: 40, depth: 28.5, height: 81.5, price: 129.00, type: 'addon', rows: 2, cols: 1 },
 
   // Drawers (Optional/Extra)
@@ -402,7 +402,10 @@ const MujiShelfConfigurator: React.FC = () => {
             title={product.name}
         >
             {/* Grid Lines */}
-            {renderGridLines(dims.rows, dims.cols)}
+            {renderGridLines(
+                (product.type === 'base' || product.type === 'addon') && rotated ? 1 : dims.rows,
+                (product.type === 'base' || product.type === 'addon') && !rotated ? 1 : dims.cols
+            )}
 
             {/* Label */}
             <div className="text-center p-1 w-full truncate px-2 relative z-10 pointer-events-none">
