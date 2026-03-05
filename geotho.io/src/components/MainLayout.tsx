@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { useTheme } from "../ThemeContext";
 import GitHubIcon from "./GitHubIcon";
 import LinkedInIcon from "./LinkedInIcon";
@@ -54,6 +54,10 @@ const ThemeToggle = () => {
 };
 
 const MainLayout = () => {
+  const location = useLocation();
+  const isToolsRoute =
+    location.pathname === "/tools" || location.pathname.startsWith("/tools/");
+
   return (
     <div className="min-h-screen text-gray-900 dark:text-gray-100">
       <header className="py-6 px-4 sm:px-6 lg:px-8 bg-white/40 dark:bg-black/20 backdrop-blur-md sticky top-0 z-10 transition-colors duration-300">
@@ -107,7 +111,11 @@ const MainLayout = () => {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <main
+        className={`${
+          isToolsRoute ? "w-full" : "max-w-4xl mx-auto"
+        } py-8 px-4 sm:px-6 lg:px-8`}
+      >
         <Outlet />
       </main>
     </div>

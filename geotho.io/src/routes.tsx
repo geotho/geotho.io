@@ -7,6 +7,7 @@ import ToolsIndexPage from "./pages/ToolsIndexPage";
 import GradientGenerator from "./tools/GradientGenerator";
 import HelloWorld from "./tools/HelloWorld";
 import MujiShelfConfigurator from "./tools/MujiShelfConfigurator";
+import SeatingPlans from "./tools/SeatingPlans";
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
           {
             path: "muji-shelf-configurator",
             element: <MujiShelfConfigurator />,
+          },
+          {
+            path: "seating-plans",
+            element: <SeatingPlans />,
           },
         ],
       },
